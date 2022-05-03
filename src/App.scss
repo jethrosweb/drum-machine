@@ -1,3 +1,38 @@
-h1 {
-    color: green;
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#drum-machine {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color:grey;
+    height: 100vh;
+    .container {
+        background-color: antiquewhite;
+        display: flex;
+        flex-wrap: wrap;
+        width: 360px;
+        height: 360px;
+    }
+}
+
+.button {
+    background-color: pink;
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+}
+
+#display {
+
+}
+
+.active {
+    background-color: aquamarine;
 }
