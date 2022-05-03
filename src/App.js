@@ -1,6 +1,5 @@
 import React from "react"
 import "./App.scss"
-import Pad from "./Pad"
 
 const drumBank = [
     {
@@ -67,16 +66,62 @@ export default function App() {
         setVolume(event.target.value)
     }
 
+    const sounds = drumBank.map((sound) => {
+        return "<div>" + sound.keyTrigger + "</div>"
+    })
+
+    console.log(sounds)
+
     return (
         <div id="drum-machine">
-            <div className="container">
+            <div className="drum-pads">
                 {drumBank.map((clip) => (
                     <Pad key={clip.id} clip={clip} volume={volume} />
                 ))}
-                <div>
+            </div>
+            <div>
+                    <p id="display">Make music!</p>
                     <h4>Volume</h4>
                     <input type="range" step="0.01" value={volume} max="1" min="0" onChange={changeVolume} />
-                </div>
+            </div>
+        </div>
+    )
+}
+
+function Pad({ clip, volume }){
+
+    const [active, setActive] = React.useState(false)
+
+    React.useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress)
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress)
+        }
+    }, [])
+
+    const handleKeyPress = (event) => {
+        if (event.keyCode === clip.keyCode) {
+            playSound();
+        }
+    }
+
+    const playSound = () => {
+        const audioTag = document.getElementById(clip.keyTrigger)
+        const display = document.getElementById("display")
+        const output = clip.id.replace(/-/g, ' ')
+        setActive(true)
+        setTimeout(() => setActive(false), 200)
+        audioTag.volume = volume
+        audioTag.currentTime = 0  
+        audioTag.play()  
+        display.innerText = output
+    }
+
+    return (
+        <div className="pad-container">
+            <div className={`button drum-pad ${active && "active"}`} onClick={playSound} id={clip.id}>
+                <audio className="clip" id={clip.keyTrigger} src={clip.url} />
+                {clip.keyTrigger}
             </div>
         </div>
     )
